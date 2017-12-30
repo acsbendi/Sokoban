@@ -1,0 +1,12 @@
+Start New Game
+Add New Level
+Show Highscores
+Exit
+Select a language
+OK
+Select the width of the level
+Select the height of the level
+Save Level
+Please Type Your Name
+Saving Highscore
+Save Highscore

@@ -1,0 +1,12 @@
+﻿Új Játék Indítása
+Új Pálya Hozzáadása
+Eredmények
+Kilépés
+Nyelvválasztás
+OK
+Állítsd be a pálya szélességét
+Állítsd be a pálya magasságát
+Pálya Mentése
+Kérlek Írd Be a Neved
+Eredmény Mentése
+Mentés
