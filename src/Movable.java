@@ -27,9 +27,19 @@ public abstract class Movable implements Displayable, Serializable{
         this.square = square;
     }
 
+    /**
+     * By default, {@code Movable}s don't stop the game from ending.
+     * @return True.
+     */
     public boolean isOver(){
         return true;
     }
 
+    /**
+     * Method for moving a {@code Movable} into a {@code FlatSquare}. It may not be successful.
+     * @param flatSquare The destination of the moving {@code Movable} object.
+     * @param direction The direction of the attempted move.
+     * @return Returns whether the move was successful.
+     */
     public abstract boolean move(FlatSquare flatSquare, Direction direction);
 }

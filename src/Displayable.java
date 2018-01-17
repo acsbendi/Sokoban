@@ -2,6 +2,10 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 
 interface Displayable {
+    /**
+     * Getter method for the image (visual representation) of the object implementing {@code Displayable} interface.
+     * @return The image (visual representation) of the object.
+     */
     BufferedImage getImage();
     /**
      * Static method for combining 2 images. Where the second image contains a non-empty pixel, it overwrites the first image's pixel.

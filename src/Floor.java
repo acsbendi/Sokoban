@@ -1,6 +1,5 @@
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 /**
@@ -10,7 +9,7 @@ public class Floor extends FlatSquare {
     static private BufferedImage image;
     static {
         try {
-            image = ImageIO.read(new File("src/floor.png"));
+            image = ImageIO.read(Floor.class.getResourceAsStream("/floor.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

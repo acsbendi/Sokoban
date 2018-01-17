@@ -1,6 +1,5 @@
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 /**
@@ -12,7 +11,7 @@ public class Crate extends Movable{
     static private BufferedImage image;
     static {
         try {
-            image = ImageIO.read(new File("src/crate.png"));
+            image = ImageIO.read(Crate.class.getResourceAsStream("/crate.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -33,11 +32,21 @@ public class Crate extends Movable{
      */
     public static BufferedImage getStaticImage(){ return  Crate.image; }
 
+    /**
+     * Crate can stop the game from ending (if they are not on the right {@code Square}.
+     * @return False.
+     */
     @Override
     public boolean isOver(){
         return false;
     }
 
+    /**
+     * Method for moving a {@code Crate} into a {@code FlatSquare}. It may not be successful.
+     * @param flatSquare The destination of this moving {@code Crate} object.
+     * @param direction The direction of the attempted move.
+     * @return Returns whether the move was successful.
+     */
     @Override
     public boolean move(FlatSquare flatSquare, Direction direction){
         boolean res = flatSquare.enter(this,direction);

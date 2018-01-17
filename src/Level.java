@@ -1,24 +1,65 @@
+import java.io.IOException;
 import java.io.Serializable;
 import java.security.InvalidParameterException;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * The class representing a level on which a game of Sokoban can be played.
+ *
+ * @author Bendeguz Acs
  */
 public class Level implements Serializable, Iterable<Square>{
     private static final long serialVersionUID = 412163760458870809L;
+    /**
+     * Static list containing the IDs of (ever) created levels
+     */
+    private static Set<Long> levelIDSet = new HashSet<>();
+    /**
+     * The unique identifier for each created {@code Level} object.
+     */
+    private final long levelID;
 
-    static int MIN_WIDTH = 5;
-    static int MAX_WIDTH = 30;
-    static int MIN_HEIGHT = 5;
-    static int MAX_HEIGHT = 30;
+    /**
+     * The minimum width of any level.
+     */
+    public static final int MIN_WIDTH = 5;
+    /**
+     * The maximum width of any level.
+     */
+    public static final int MAX_WIDTH = 30;
+    /**
+     * The minimum height of any level.
+     */
+    public static final int MIN_HEIGHT = 5;
+    /**
+     * The maximum height of any level.
+     */
+    public static final int MAX_HEIGHT = 30;
 
     private List<Square> squares;
     private final Player player;
     private final int width;
     private final int height;
 
+    /**
+     * Constructs a new {@code Level} with specified dimensions, and {@code Player}.
+     * @param width The width of this {@code Level}.
+     * @param height The height of this {@code Level}.
+     * @param player The {@code Player} of this {@code Level}.
+     */
     Level(int width, int height, Player player){
+        if(width < MIN_WIDTH || width > MAX_WIDTH)
+            throw new InvalidParameterException("The specified width doesn't satisfy the constraints.");
+        if(height < MIN_HEIGHT || height > MAX_HEIGHT)
+            throw new InvalidParameterException("The specified width doesn't satisfy the constraints.");
+        LevelSelector.loadLevels(); //loading the levels, so that the level ID set will actually contain the IDs of the previously created levels
+        long newID;
+        do{
+            newID = ThreadLocalRandom.current().nextLong();
+        } while(Level.levelIDSet.contains(newID));
+        levelID = newID;
+        Level.levelIDSet.add(levelID);
         this.height = height;
         this.width = width;
         this.player = player;
@@ -27,6 +68,9 @@ public class Level implements Serializable, Iterable<Square>{
             squares.add(new Floor(null));
         ((FlatSquare)squares.get(0)).setMovable(player);
         player.setSquare((FlatSquare)squares.get(0));
+
+        for(long l : levelIDSet)
+            System.out.println(l);
     }
 
     /**
@@ -44,6 +88,28 @@ public class Level implements Serializable, Iterable<Square>{
     public int getHeight() {
         return height;
     }
+
+    /**
+     * Getter method for the ID of this level.
+     * @return The unique identifier of this level.
+     */
+    public long getLevelID() {
+        return levelID;
+    }
+
+    /**
+     * Custom deserialization method is needed because the unique ID of the currently loaded level
+     * needs to be added to the static list of IDs.
+     * @param in The stream from which the object will be read .
+     * @throws IOException The reading from the stream might throw an {@code IOException}.
+     * @throws ClassNotFoundException The creation of a {@code Level} object can throw a {@code ClassNotFoundException}.
+     */
+    private void readObject(java.io.ObjectInputStream in)
+            throws IOException, ClassNotFoundException{
+        in.defaultReadObject();
+        Level.levelIDSet.add(levelID);
+    }
+
 
     /**
      * Sets a square in the given position, to a given square.

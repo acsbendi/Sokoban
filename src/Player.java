@@ -2,8 +2,7 @@ import javax.imageio.ImageIO;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
-        import java.io.File;
-        import java.io.IOException;
+import java.io.IOException;
 
 /**
  * The class representing the player, who can can move crates.
@@ -13,33 +12,53 @@ public class Player extends Movable implements KeyListener {
 
     static private BufferedImage image;
 
+    private Level level;
+    private Game game;
+
     static {
         try {
-            image = ImageIO.read(new File("src/player.png"));
+            image = ImageIO.read(Player.class.getResourceAsStream("/player.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * Getter method for the {@code Level} of the player.
+     * @return The {@code Level} on which the player is moving.
+     */
     public Level getLevel() {
         return level;
     }
 
+    /**
+     * Setter method for the {@code Level} of the player.
+     * @param level The {@code Level} on which the player will be moving moving.
+     */
     public void setLevel(Level level) {
         this.level = level;
     }
 
-    private Level level;
-    private Game game;
-
+    /**
+     * Getter method for the {@code Game} current played by this {@code Player}.
+     * @return The currently played {@code Game}.
+     */
     public Game getGame() {
         return game;
     }
 
+    /**
+     * Setter method for the {@code Game} current played by this {@code Player}.
+     * @param game The {@code Game} to be played by this {@code Player}.
+     */
     public void setGame(Game game) {
         this.game = game;
     }
 
+    /**
+     * Constructs a new {@code Player} on a specified {@code Level}.
+     * @param level The {@code Level} on which the {@code Player} will be.
+     */
     Player(Level level) {
         this.level = level;
     }
@@ -106,6 +125,12 @@ public class Player extends Movable implements KeyListener {
         destinationSquare.enter(this, direction);
     }
 
+    /**
+     * Method for moving a {@code Player} into a {@code FlatSquare}. It may not be successful.
+     * @param flatSquare The destination of the moving {@code Player} object.
+     * @param direction The direction of the attempted movement.
+     * @return Returns whether the movement was successful.
+     */
     @Override
     public boolean move(FlatSquare flatSquare, Direction direction) {
         if (flatSquare.enter(this, direction)) {

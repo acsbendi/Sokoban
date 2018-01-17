@@ -1,7 +1,5 @@
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +7,7 @@ import java.util.List;
  * The Language class responsible for handling all language-specific string in the application.
  * Provides a simple way to add any new languages.
  */
-public enum Language { English("res/english.txt"), Magyar("res/magyar.txt");
+public enum Language { English("/english.txt"),  Magyar("/magyar.txt");
 
     private List<String> data;
 
@@ -17,7 +15,7 @@ public enum Language { English("res/english.txt"), Magyar("res/magyar.txt");
         BufferedReader br;
         data = new ArrayList<>();
         try {
-            br = new BufferedReader(new FileReader(fileName));
+            br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(fileName), StandardCharsets.UTF_8));
             String line;
             do {
                 line = br.readLine();

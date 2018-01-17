@@ -4,19 +4,23 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 /**
  * The class that displays the main menu of the application, from where each functionality can be accessed.
+ *
+ * @author Bendeguz Acs
  */
 public class Sokoban extends JFrame{
 
+    /**
+     * A JComponent that has a picture as its background.
+     */
     class BackgroundPanel extends JComponent {
         private BufferedImage image;
         public BackgroundPanel() {
             try {
-                this.image = ImageIO.read(new File("res/background.png"));
+                this.image = ImageIO.read(getClass().getResourceAsStream("/background.png"));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -69,7 +73,9 @@ public class Sokoban extends JFrame{
         outerLayout.addLayoutComponent(new JPanel(),BorderLayout.SOUTH);
     }
 
-
+    /**
+     * Constructs a new Sokoban application.
+     */
     Sokoban(){
         Language.selectedLanguage = Language.English; //the application's default language is English
         setContentPane(new BackgroundPanel());

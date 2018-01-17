@@ -1,6 +1,5 @@
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 
@@ -13,7 +12,7 @@ public class Wall implements Square, Serializable {
     static private BufferedImage image;
     static {
         try {
-            image = ImageIO.read(new File("src/wall.png"));
+            image = ImageIO.read(Wall.class.getResourceAsStream("/wall.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

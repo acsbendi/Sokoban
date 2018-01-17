@@ -39,9 +39,6 @@ public class LevelDimensionsDialog extends JDialog {
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
 
-
-
-
         c.insets = new Insets(3,3,3,3);
         c.gridx = 0;
         c.gridy = 0;

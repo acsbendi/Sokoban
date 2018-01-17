@@ -71,6 +71,10 @@ public class ButtonPanel extends JPanel{
     }
 
 
+    /**
+     * Cinstructs a new {@code ButtonPanel}.
+     * @param sokoban The {@code Sokoban} object that is creating (and using) this object.
+     */
     ButtonPanel(Sokoban sokoban){
         this.sokoban = sokoban;
         GridLayout layout = new GridLayout(4,1);
@@ -90,7 +94,7 @@ public class ButtonPanel extends JPanel{
         add(exitButton);
 
         try {
-            buttonBackground = ImageIO.read(getClass().getResource("button.png"));
+            buttonBackground = ImageIO.read(getClass().getResource("/button.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

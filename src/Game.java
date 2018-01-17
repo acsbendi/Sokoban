@@ -5,18 +5,23 @@ import java.util.List;
 
 
 /**
- * The singleton class responsible for one gameplay of a specified level.
+ * The class responsible for one gameplay of a specified level.
+ *
+ * @author Bendeguz Acs
  */
 public class Game extends JFrame{
-    private Sokoban caller;
+    private Sokoban sokoban;
     private Level level;
     private JPanel middlePanel;
     private List<JLabel> squareImageLabels;
-    private Record record;
+    private int numberOfMoves;
 
 
+    /**
+     * The method that should be called after every successful move.
+     */
     public void onMove(){
-        record.numberOfMoves++;
+        numberOfMoves++;
         if(level.isOver()) end();
     }
 
@@ -24,7 +29,7 @@ public class Game extends JFrame{
      * Creates the next window (HighScoreSaver) and closes this one after the games is over.
      */
     public void end(){
-        new HighScoreSaver(record,caller);
+        new HighScoreSaver(level.getLevelID(),numberOfMoves,sokoban);
         setVisible(false);
         dispose();
     }
@@ -38,11 +43,14 @@ public class Game extends JFrame{
         squareImageLabels.get(level.getIndexOf(square)).setIcon(new ImageIcon(square.getImage()));
     }
 
-    Game(Level level, int levelIndex, Sokoban sokoban){
-        caller = sokoban;
-        record = new Record();
-        record.levelIndex = levelIndex;
-        record.numberOfMoves = 0;
+    /**
+     * Constructs a new {@code Game} with the specified level to be played.
+     * @param level The {@code Level} to be played.
+     * @param sokoban The {@code Sokoban} object creating this new instance.
+     */
+    Game(Level level, Sokoban sokoban){
+        this.sokoban = sokoban;
+        numberOfMoves = 0;
         this.level = level;
         level.getPlayer().setGame(this);
         middlePanel = new JPanel(new GridLayout(level.getHeight(),level.getWidth()));

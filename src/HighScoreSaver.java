@@ -11,10 +11,14 @@ import java.util.List;
  * The window for saving a highscore.
  * The user can type their nickname in the textbox, then after the OK button is pressed,
  * the highscore is saved.
+ *
+ * @author Bendeguz Acs
  */
 public class HighScoreSaver extends JFrame{
-    private Sokoban caller;
-    private Record record;
+    private Sokoban sokoban;
+    private long levelID;
+    private int numberOfMoves;
+    private String nameOfPlayer;
     private TextField textField;
 
     /**
@@ -23,7 +27,7 @@ public class HighScoreSaver extends JFrame{
     private class SaveButtonListener implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
-            record.nameOfPlayer = textField.getText();
+            nameOfPlayer = textField.getText();
             saveRecord();
         }
     }
@@ -42,7 +46,7 @@ public class HighScoreSaver extends JFrame{
             records = new ArrayList<>();
         }
 
-        records.add(record);
+        records.add(new Record(levelID,numberOfMoves,nameOfPlayer));
 
         try {
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("highscores.txt"));
@@ -52,15 +56,16 @@ public class HighScoreSaver extends JFrame{
             e.printStackTrace();
         }
 
-        caller.setVisible(true);
+        sokoban.setVisible(true);
         dispose();
         setVisible(false);
     }
 
 
-    HighScoreSaver(Record record, Sokoban sokoban){
-        caller = sokoban;
-        this.record = record;
+    HighScoreSaver(long levelID, int numberOfMoves, Sokoban sokoban){
+        this.sokoban = sokoban;
+        this.levelID = levelID;
+        this.numberOfMoves = numberOfMoves;
         setTitle(Language.selectedLanguage.getSavingHighScoreText());
         setLayout(new BoxLayout(getContentPane(),BoxLayout.Y_AXIS));
         JLabel nameLabel = new JLabel(Language.selectedLanguage.getTypeYourNameText());

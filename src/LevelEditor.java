@@ -31,7 +31,7 @@ class LevelEditor extends JFrame{
         private class SaveButtonListener implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
-            saveLevel();
+            acceptLevel();
         }
     }
 
@@ -57,7 +57,7 @@ class LevelEditor extends JFrame{
         }
     }
 
-        private Sokoban caller;
+        private Sokoban sokoban;
         private Level level;
         private JLabel wallLabel;
         private JLabel floorLabel;
@@ -128,7 +128,7 @@ class LevelEditor extends JFrame{
             getContentPane().add(middlePanel,BorderLayout.CENTER);
         }
 
-        /**
+    /**
      * Method for initializing the bottom panel on this window.
      */
         private void initializeBottomPanel(){
@@ -140,7 +140,7 @@ class LevelEditor extends JFrame{
             getContentPane().add(bottomPanel,BorderLayout.SOUTH);
         }
 
-        /**
+    /**
      * Refreshes a square's image. The square is referenced by an index.
      * @param index The index of a JLabel in the list of JLabels that show the images of squares.
      */
@@ -151,7 +151,7 @@ class LevelEditor extends JFrame{
         /**
         * Saves the level into a file. Uses object serialization.
         */
-        private void saveLevel(){
+        private void acceptLevel(){
             //loading previous levels
             List<Level> levels;
             try {
@@ -162,8 +162,17 @@ class LevelEditor extends JFrame{
                 levels = new ArrayList<>();
             }
             levels.add(level);
+            LevelEditor.saveLevels(levels);
+            setVisible(false);
+            sokoban.setVisible(true);
+            dispose();
+        }
 
-            //saving all levels
+    /**
+     * Saves the specified list of levels using object serialization.
+     * @param levels The list of levels to be saved.
+     */
+    public static void saveLevels(List<Level> levels){
             try {
                 ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("src/levels.txt"));
                 oos.writeObject(levels);
@@ -171,16 +180,16 @@ class LevelEditor extends JFrame{
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-            setVisible(false);
-            caller.setVisible(true);
-            dispose();
         }
 
-        LevelEditor(Sokoban sokoban){
-            caller = sokoban;
-            caller.setVisible(false);
-            LevelDimensionsDialog levelDimensionsDialog = new LevelDimensionsDialog(this);
+    /**
+     * Constructs a new LevelEditor.
+     * @param sokoban The {@code Sokoban} object that is creating this object.
+     */
+    LevelEditor(Sokoban sokoban){
+            this.sokoban = sokoban;
+            this.sokoban.setVisible(false);
+            new LevelDimensionsDialog(this);
             initializeTopPanel();
             initializeBottomPanel();
             getContentPane().add(new JPanel(), BorderLayout.WEST);

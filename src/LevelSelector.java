@@ -2,16 +2,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.*;
 import java.util.List;
 
 /**
  * The class that shows the various levels which the user can play, and each level can be selected to be played.
+ * The user can also delete levels, as long as there is more than one available.
+ *
+ * @author Bendeguz Acs
  */
 public class LevelSelector extends JFrame {
-    private Sokoban caller;
+    private Sokoban sokoban;
     private List<Level> levels;
     private JPanel middlePanel;
     private int currentLevelIndex;
@@ -40,7 +41,8 @@ public class LevelSelector extends JFrame {
                     showCurrentLevel();
                     break;
                 case KeyEvent.VK_ENTER:
-                    new Game(levels.get(currentLevelIndex),currentLevelIndex,caller);
+                    LevelEditor.saveLevels(levels); //Since the user may deleted levels, their list needs to be saved.
+                    new Game(levels.get(currentLevelIndex),sokoban);
                     setVisible(false);
                     dispose();
                     break;
@@ -60,14 +62,16 @@ public class LevelSelector extends JFrame {
     /**
      * Loads the available levels from a file into a list. Uses object deserialization.
      */
-    private void initializeLevels(){
+    public static List<Level> loadLevels(){
+        List<Level> levels = null;
         try {
-            ObjectInputStream ois = new ObjectInputStream(new FileInputStream("src/levels.txt"));
+            ObjectInputStream ois = new ObjectInputStream(LevelSelector.class.getResourceAsStream("/levels.txt"));
             levels = (List<Level>)ois.readObject();
             ois.close();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+        return levels;
     }
 
     /**
@@ -86,10 +90,14 @@ public class LevelSelector extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Constructs a new {@code LevelSelector}.
+     * @param sokoban The {@code Sokoban} object that is creating this object.
+     */
     LevelSelector(Sokoban sokoban){
-        caller = sokoban;
-        caller.setVisible(false);
-        initializeLevels();
+        this.sokoban = sokoban;
+        this.sokoban.setVisible(false);
+        levels = loadLevels();
         currentLevelIndex = 0;
         showCurrentLevel();
         addKeyListener(new ControlKeyListener());

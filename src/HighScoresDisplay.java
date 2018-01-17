@@ -13,18 +13,27 @@ import java.util.List;
  */
 public class HighScoresDisplay extends JFrame {
 
-
     /**
      * Event-handler class for reopening the main menu after this window has been closed.
      */
     class HighScoresDisplayWindowListener extends WindowAdapter{
+        /**
+         * When this window has been closed, makes the caller {@code Sokoban} object visible again.
+         * @param e
+         */
         @Override
         public void windowClosed(WindowEvent e){
-            caller.setVisible(true);
+            sokoban.setVisible(true);
         }
     }
 
-    private Sokoban caller;
+    /**
+     * The {@code Sokoban} object that created this object.
+     */
+    private Sokoban sokoban;
+    /**
+     * A list containing all the {@code Record}s that this object reads from a file and shows on a window.
+     */
     private List<Record> records;
 
     /**
@@ -41,8 +50,8 @@ public class HighScoresDisplay extends JFrame {
     }
 
     HighScoresDisplay(Sokoban sokoban){
-        caller = sokoban;
-        caller.setVisible(false);
+        this.sokoban = sokoban;
+        this.sokoban.setVisible(false);
         readRecords();
         addWindowListener(new HighScoresDisplayWindowListener());
         List<String> stringList = new ArrayList<>(records.size());

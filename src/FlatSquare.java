@@ -1,36 +1,39 @@
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 
 /**
  * The class representing an "empty" square, used at the initialization of a level object.
- * Also serves as the base class for other square types on which a Movable object can move.
+ * Also serves as the base class for other square types on which a {@code Movable} object can move.
  */
 public class FlatSquare implements Square, Serializable{
     private static final long serialVersionUID = 3210605766743706355L;
 
     /**
-     * The Movable (either the Player or a Crate) object that occupies this square
+     * The {@code Movable} object that occupies this square
      */
     protected Movable movable;
 
+    /**
+     * Constructs a new {@code FlatSquare} with the specified {@code Movable} on it.
+     * @param movable The {@code Movable} to occupy this square.
+     */
     FlatSquare(Movable movable){
         setMovable(movable);
     }
 
     /**
-     * Getter for the Movable object that occupies this square.
-     * @return The Movable object that occupies this square.
+     * Getter for the {@code Movable} object that occupies this square.
+     * @return The {@code Movable} object that occupies this square.
      */
     public Movable getMovable() {
         return movable;
     }
 
     /**
-     * Setter method for the Movable object that will occupy this square.
-     * @param movable The Movable object to occupy this square.
+     * Setter method for the {@code Movable} object that will occupy this square.
+     * @param movable The {@code Movable} object to occupy this square.
      */
     public void setMovable(Movable movable) {
         this.movable = movable;
@@ -41,7 +44,7 @@ public class FlatSquare implements Square, Serializable{
     static private BufferedImage image;
     static {
         try {
-            image = ImageIO.read(new File("src/empty.png"));
+            image = ImageIO.read(FlatSquare.class.getResourceAsStream("/empty.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -49,7 +52,7 @@ public class FlatSquare implements Square, Serializable{
 
     /**
      * Getter for the image of this instance.
-     * @return The image of a FlatSquare object.
+     * @return The image of a {@code FlatSquare} object.
      */
     @Override
     public BufferedImage getImage(){
@@ -58,8 +61,8 @@ public class FlatSquare implements Square, Serializable{
     }
 
     /**
-     * Static getter for the image of any FlatSquare object.
-     * @return The common image that all FlatSquare objects have.
+     * Static getter for the image of any {@code FlatSquare} object.
+     * @return The common image that all {@code FlatSquare} objects have.
      */
     public static BufferedImage getStaticImage(){
         return FlatSquare.image;
@@ -70,11 +73,26 @@ public class FlatSquare implements Square, Serializable{
         return movable == null || movable.isOver();
     }
 
+    /**
+     * Method for handling movements into this {@code FlatSquare} by any {@code Movable}.
+     * Calls their {@code move} methods to tell them they may enter here.
+     * @param movable The moving {@code Movable} object.
+     * @param direction The direction of the movement.
+     * @return Returns whether the movement was successful.
+     */
     @Override
     public boolean enter(Movable movable, Direction direction){
         return movable.move(this,direction);
     }
 
+    /**
+     * Method for handling movements into this {@code FlatSquare} by a {@code Player}.
+     * It can enter if this {@code FlatSquare} is empty or the next {@ocde Square} in the direction
+     * of the movement is also a {@code FlatSquare} and empty.
+     * @param player The moving {@code Player} object.
+     * @param direction The direction of the movement.
+     * @return Returns whether the movement was successful.
+     */
     public boolean enter(Player player, Direction direction){
         if(this.movable != null){
             if(player.getLevel().getNeighbor(this,direction).enter(movable,direction)){
@@ -88,6 +106,13 @@ public class FlatSquare implements Square, Serializable{
         return true;
     }
 
+    /**
+     * Method for handling movements into this {@code FlatSquare} by a {@code Crate}.
+     * It can only enter if this {@code FlatSquare} is empty.
+     * @param crate The moving {@code Player} object.
+     * @param direction The direction of the movement.
+     * @return Returns whether the movement was successful.
+     */
     public boolean enter(Crate crate, Direction direction){
         if(this.movable != null){
             return false;
