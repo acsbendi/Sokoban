@@ -72,7 +72,7 @@ public class ButtonPanel extends JPanel{
 
 
     /**
-     * Cinstructs a new {@code ButtonPanel}.
+     * Constructs a new {@code ButtonPanel}.
      * @param sokoban The {@code Sokoban} object that is creating (and using) this object.
      */
     ButtonPanel(Sokoban sokoban){

@@ -40,7 +40,7 @@ class LevelEditor extends JFrame{
      */
         private class SquareClickListener extends MouseAdapter{
         @Override
-        public void mouseClicked(MouseEvent e) {
+        public void mousePressed(MouseEvent e) {
             int index = squareImageLabels.indexOf(e.getSource());
             try {
                 level.setSquare(index % level.getWidth(), index / level.getWidth(), selectedSquare);
